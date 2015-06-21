@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EE255AEB-CCED-4EC1-9427-7077B5687122}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TradeSimulator</RootNamespace>
+    <AssemblyName>TradeSimulator</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Model\Account.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Model\Portfolio.cs" />
+    <Compile Include="Model\Position.cs" />
+    <Compile Include="Model\PurchaseRequest.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategies\AlwaysAllocateDepositEvenly.cs" />
+    <Compile Include="Strategies\RebalanceWithoutSelling.cs" />
+    <Compile Include="Strategies\RebalanceAtDeposit.cs" />
+    <Compile Include="Strategies\SellWinnerBuyLoser.cs" />
+    <Compile Include="Strategies\MovementFromYesterdayAllSymbols.cs" />
+    <Compile Include="Strategies\EvenAllocation.cs" />
+    <Compile Include="Strategies\BuyLoser.cs" />
+    <Compile Include="Strategies\MovementFromYesterdayBase.cs" />
+    <Compile Include="Strategies\ActualAllocationBenchmark.cs" />
+    <Compile Include="Strategies\NeuralNetwork.cs" />
+    <Compile Include="Strategies\SP500Benchmark.cs" />
+    <Compile Include="Strategies\MovementFromYesterday.cs" />
+    <Compile Include="Strategies\StrategyBase.cs" />
+    <Compile Include="StrategyRunner.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{3e5449d5-9126-427b-97fd-46d3d53c2967}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{dc540905-5d29-45a5-a6c6-8e0924d64251}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NeuralNet\NeuralNet.csproj">
+      <Project>{ebe0543a-488a-4ecf-9cdd-eca14927b8ca}</Project>
+      <Name>NeuralNet</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
