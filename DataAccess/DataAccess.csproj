@@ -52,7 +52,7 @@
     <Compile Include="Repositories\HiddenWeightsRepository.cs" />
     <Compile Include="Repositories\HiddenBiasesRepository.cs" />
     <Compile Include="Repositories\NeuralNetworkRepository.cs" />
-    <Compile Include="Repositories\StockRepository.cs" />
+    <Compile Include="Repositories\RawDataRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
   </ItemGroup>

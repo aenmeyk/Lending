@@ -45,6 +45,7 @@
     <Compile Include="ExtensionMethods\EnumerableExtensions.cs" />
     <Compile Include="Models\NeuralNetworkItem.cs" />
     <Compile Include="Models\NeuronValue.cs" />
+    <Compile Include="Models\RawDataItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

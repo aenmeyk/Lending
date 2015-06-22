@@ -12,7 +12,8 @@ namespace DataAccess.Repositories
 
         public IEnumerable<T> Get<T>()
         {
-            var queryText = string.Format("SELECT * FROM {0}", TableName);
+            // TODO: Remove TOP 100
+            var queryText = string.Format("SELECT TOP 100 * FROM {0}", TableName);
 
             using (var sqlConnection = new SqlConnection(ConnectionString))
             {
