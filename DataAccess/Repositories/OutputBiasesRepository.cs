@@ -3,7 +3,7 @@ using Common.Models;
 
 namespace DataAccess.Repositories
 {
-    public class OutputBiasesRepository : SymbolRepositoryBase
+    public class OutputBiasesRepository : RepositoryBase
     {
         protected override string TableName
         {
@@ -16,12 +16,11 @@ namespace DataAccess.Repositories
             {
                 Columns =
                 {
-                    new DataColumn("Symbol", typeof(string)),
                     new DataColumn("Value", typeof(decimal))
                 }
             };
 
-            dataTable.Rows.Add(neuronValue.Symbol, neuronValue.Value);
+            dataTable.Rows.Add(neuronValue.Value);
 
             BulkInsert(dataTable);
         }

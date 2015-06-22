@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Repositories
 {
-    public class StockRepository : SymbolRepositoryBase
+    public class StockRepository : RepositoryBase
     {
         protected override string TableName
         {

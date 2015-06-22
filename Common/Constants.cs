@@ -17,9 +17,4 @@ namespace Common
         public const bool IGNORE_SPREAD = true;
         public const bool IGNORE_TRADING_FEE = true;
     }
-
-    public static class CommonConstants
-    {
-        public const string PERSISTANCE_PATH = @"D:\Work\Trading\HistoricalPrices\{0}.csv";
-    }
 }

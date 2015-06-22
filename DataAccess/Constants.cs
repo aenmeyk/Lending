@@ -2,6 +2,6 @@
 {
     internal static class Constants
     {
-        public const string CONNECTION_STRING = @"Server=KEVDESKTOP\DEV2014;Database=Trading;Trusted_Connection=True";
+        public const string CONNECTION_STRING = @"Server=L00653;Database=Lending;Trusted_Connection=True";
     }
 }

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Trader</RootNamespace>
     <AssemblyName>Trader</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,27 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Account.cs" />
-    <Compile Include="Domain\Market.cs" />
-    <Compile Include="Domain\Portfolio.cs" />
-    <Compile Include="Domain\Position.cs" />
-    <Compile Include="Domain\PositionEntry.cs" />
-    <Compile Include="Domain\TaxLotSelectors\TaxLotOptimizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Domain\Quote.cs" />
-    <Compile Include="Domain\TradeAction.cs" />
-    <Compile Include="Domain\Transaction.cs" />
-    <Compile Include="Strategies\ActualFixedAllocation.cs" />
-    <Compile Include="Strategies\ActualAllocationRebalanceByDeposit.cs" />
-    <Compile Include="Strategies\EvenAllocationBase.cs" />
-    <Compile Include="Strategies\FixedAllocationBase.cs" />
-    <Compile Include="Strategies\BuyLoser.cs" />
-    <Compile Include="Strategies\RebalanceByDepositBase.cs" />
-    <Compile Include="Strategies\SingleStock.cs" />
-    <Compile Include="Strategies\StrategyBase.cs" />
     <Compile Include="Strategies\StrategyRunner.cs" />
-    <Compile Include="Strategies\SymbolLists.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
@@ -73,7 +56,9 @@
       <Name>DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

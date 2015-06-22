@@ -14,7 +14,7 @@ namespace NeuralNet
         private HiddenBiasesRepository _hiddenBiasesRepository = new HiddenBiasesRepository();
         private OutputBiasesRepository _outputBiasesRepository = new OutputBiasesRepository();
 
-        public void TrainNetwork(string forSymbol, Core core, IEnumerable<NeuralNetworkItem> neuralNetworkItems)
+        public void TrainNetwork(Core core, IEnumerable<NeuralNetworkItem> neuralNetworkItems)
         {
             var dateValues = neuralNetworkItems.Select(x => x.DateValue).Distinct();
             var dateCount = dateValues.Count();
@@ -27,7 +27,7 @@ namespace NeuralNet
 
                 var inputValues = new double[dateCount][];
                 var outputValues = new double[dateCount];
-                PopulateValues(forSymbol, dateValues, neuralNetworkItems, inputValues, outputValues);
+                PopulateValues(dateValues, neuralNetworkItems, inputValues, outputValues);
                 var network = new Network(core, inputValues, outputValues);
 
                 network.LearningRate = ProcessingSettings.LearningRate * Math.Pow(ProcessingSettings.LearningRate, trial);
@@ -40,7 +40,7 @@ namespace NeuralNet
                     NetworkOperations.BackPropogate(network, record);
                 }
 
-                PersistCoreValues(forSymbol, core);
+                PersistCoreValues(core);
             };
             //});
         }
@@ -57,7 +57,7 @@ namespace NeuralNet
             return network.OutputOutput[0];
         }
 
-        public void PersistCoreValues(string symbol, Core core)
+        public void PersistCoreValues(Core core)
         {
             var hiddenWeights = new Collection<NeuronValue>();
             var outputWeights = new Collection<NeuronValue>();
@@ -69,7 +69,6 @@ namespace NeuralNet
                 {
                     hiddenWeights.Add(new NeuronValue
                     {
-                        Symbol = symbol,
                         HiddenNeuronIndex = hiddenNeuron,
                         InputNeuronIndex = inputNeuron,
                         Value = core.HiddenWeight[hiddenNeuron][inputNeuron]
@@ -78,14 +77,12 @@ namespace NeuralNet
 
                 outputWeights.Add(new NeuronValue
                 {
-                    Symbol = symbol,
                     HiddenNeuronIndex = hiddenNeuron,
                     Value = core.OutputWeight[hiddenNeuron]
                 });
 
                 hiddenBiases.Add(new NeuronValue
                 {
-                    Symbol = symbol,
                     HiddenNeuronIndex = hiddenNeuron,
                     Value = core.HiddenBias[hiddenNeuron]
                 });
@@ -93,14 +90,13 @@ namespace NeuralNet
 
             var outputBias = new NeuronValue
             {
-                Symbol = symbol,
                 Value = core.OutputBias
             };
 
-            _hiddenWeightsRepository.DeleteForSymbol(symbol);
-            _outputWeightsRepository.DeleteForSymbol(symbol);
-            _hiddenBiasesRepository.DeleteForSymbol(symbol);
-            _outputBiasesRepository.DeleteForSymbol(symbol);
+            _hiddenWeightsRepository.Truncate();
+            _outputWeightsRepository.Truncate();
+            _hiddenBiasesRepository.Truncate();
+            _outputBiasesRepository.Truncate();
 
             _hiddenWeightsRepository.InsertNeuronValues(hiddenWeights);
             _outputWeightsRepository.InsertNeuronValues(outputWeights);
@@ -110,10 +106,10 @@ namespace NeuralNet
 
         public void LoadNetworkValues(string symbol, Core core)
         {
-            var hiddenWeights = _hiddenWeightsRepository.GetForSymbols<NeuronValue>(new[] { symbol });
-            var outputWeights = _outputWeightsRepository.GetForSymbols<NeuronValue>(new[] { symbol });
-            var hiddenBiases = _hiddenBiasesRepository.GetForSymbols<NeuronValue>(new[] { symbol });
-            var outputBiases = _outputBiasesRepository.GetForSymbols<NeuronValue>(new[] { symbol });
+            var hiddenWeights = _hiddenWeightsRepository.Get<NeuronValue>();
+            var outputWeights = _outputWeightsRepository.Get<NeuronValue>();
+            var hiddenBiases = _hiddenBiasesRepository.Get<NeuronValue>();
+            var outputBiases = _outputBiasesRepository.Get<NeuronValue>();
 
             core.InitializeArrays();
             core.OutputBias = outputBiases.Single().Value;
@@ -139,60 +135,10 @@ namespace NeuralNet
             }
         }
 
-        private void PopulateValues(string forSymbol, IEnumerable<DateTime> dateValues, IEnumerable<NeuralNetworkItem> neuralNetworkItems, double[][] inputValues, double[] outputValues)
+        private void PopulateValues(IEnumerable<DateTime> dateValues, IEnumerable<NeuralNetworkItem> neuralNetworkItems, double[][] inputValues, double[] outputValues)
         {
             var i = 0;
-
             var outputValue = 1.0;
-            switch (forSymbol)
-            {
-                case "EWA":
-                    outputValue = 0.765017667844;
-                    break;
-                case "EWC":
-                    outputValue = 0.595406360424;
-                    break;
-                case "EWD":
-                    outputValue = 0.849823321554;
-                    break;
-                case "EWG":
-                    outputValue = 0.298586572438;
-                    break;
-                case "EWH":
-                    outputValue = 0.876325088339;
-                    break;
-                case "EWI":
-                    outputValue = 0.501766784452;
-                    break;
-                case "EWK":
-                    outputValue = 0.461130742049;
-                    break;
-                case "EWL":
-                    outputValue = 0.438162544169;
-                    break;
-                case "EWM":
-                    outputValue = 1;
-                    break;
-                case "EWN":
-                    outputValue = 0.217314487632;
-                    break;
-                case "EWO":
-                    outputValue = 0.724381625441;
-                    break;
-                case "EWP":
-                    outputValue = 0.531802120141;
-                    break;
-                case "EWQ":
-                    outputValue = 0.196113074204;
-                    break;
-                case "EWS":
-                    outputValue = 0.756183745583;
-                    break;
-                case "EWU":
-                    outputValue = 0.318021201413;
-                    break;
-            }
-
 
             foreach (var date in dateValues)
             {
@@ -200,14 +146,9 @@ namespace NeuralNet
                 inputValues[i] = GetInputValues(selectedNetworkItems, inputValues[i]);
                 var winningNetworkItem = selectedNetworkItems.OrderBy(x => x.FuturePriceChange10).Last();
 
-                if (winningNetworkItem.Symbol == forSymbol)
-                {
-                    outputValues[i] = outputValue;
-                }
-                else
-                {
-                    outputValues[i] = 0;
-                }
+                // TODO:
+                throw new NotImplementedException();
+                outputValues[i] = outputValue;
 
                 i++;
             }
