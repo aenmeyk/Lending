@@ -98,27 +98,27 @@ namespace Common.Models
         /// <summary>
         /// The number of inquiries by creditors during the past 6 months.
         /// </summary>
-        public int inq_last_6mths { get; set; }
+        public int? inq_last_6mths { get; set; }
 
         /// <summary>
         /// The number of months since the borrower's last delinquency.
         /// </summary>
-        public int mths_since_last_delinq { get; set; }
+        public int? mths_since_last_delinq { get; set; }
 
         /// <summary>
         /// The number of months since the last public record.
         /// </summary>
-        public int mths_since_last_record { get; set; }
+        public int? mths_since_last_record { get; set; }
 
         /// <summary>
         /// The number of open credit lines in the borrower's credit file.
         /// </summary>
-        public int open_acc { get; set; }
+        public int? open_acc { get; set; }
 
         /// <summary>
         /// Number of derogatory public records.
         /// </summary>
-        public int pub_rec { get; set; }
+        public int? pub_rec { get; set; }
 
         /// <summary>
         /// Total credit revolving balance.
@@ -133,7 +133,7 @@ namespace Common.Models
         /// <summary>
         /// The total number of credit lines currently in the borrower's credit file.
         /// </summary>
-        public int total_acc { get; set; }
+        public int? total_acc { get; set; }
 
         /// <summary>
         /// The initial listing status of the loan. Possible values are – “F” for fractional, “W” for whole.
@@ -178,6 +178,6 @@ namespace Common.Models
         /// <summary>
         /// Months since most recent 90-day or worse rating.
         /// </summary>
-        public int mths_since_last_major_derog { get; set; }
+        public int? mths_since_last_major_derog { get; set; }
     }
 }
