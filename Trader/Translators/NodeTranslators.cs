@@ -9,19 +9,19 @@ namespace Trader.Translators
 
         public static double AnnualIncome(RawDataItem rawDataItem)
         {
-            var nodeValue = (double)rawDataItem.annual_inc / 250000;
+            var nodeValue = (double)(rawDataItem.annual_inc ?? 0) / 250000;
             return TrimReturnValue(nodeValue);
         }
 
         public static double Collections(RawDataItem rawDataItem)
         {
-            var nodeValue = rawDataItem.collections_12_mths_ex_med / 3.0;
+            var nodeValue = (rawDataItem.collections_12_mths_ex_med ?? 0) / 3.0;
             return TrimReturnValue(nodeValue);
         }
 
         public static double Delinquencies(RawDataItem rawDataItem)
         {
-            var nodeValue = rawDataItem.delinq_2yrs / 5.0;
+            var nodeValue = (rawDataItem.delinq_2yrs ?? 0) / 5.0;
             return TrimReturnValue(nodeValue);
         }
 
@@ -137,7 +137,7 @@ namespace Trader.Translators
             const double numberOfItems = 34;
             double nodeValue = 0;
 
-            switch (rawDataItem.grade)
+            switch (rawDataItem.sub_grade)
             {
                 case "A1":
                     nodeValue = 34 / numberOfItems;
@@ -293,6 +293,11 @@ namespace Trader.Translators
 
         public static double Installment(RawDataItem rawDataItem)
         {
+            if(rawDataItem.annual_inc == null || rawDataItem.annual_inc == 0)
+            {
+                return 1;
+            }
+
             return (double)((rawDataItem.installment * 12) / rawDataItem.annual_inc);
         }
 
@@ -324,24 +329,29 @@ namespace Trader.Translators
 
         public static double LoanAmount(RawDataItem rawDataItem)
         {
+            if (rawDataItem.annual_inc == null || rawDataItem.annual_inc == 0)
+            {
+                return 1;
+            }
+
             return (double)(rawDataItem.loan_amnt / rawDataItem.annual_inc);
         }
 
         public static double MonthsSinceDelinquent(RawDataItem rawDataItem)
         {
-            var nodeValue = (rawDataItem.mths_since_last_delinq ?? 120.0) / 120.0;
+            var nodeValue = (rawDataItem.mths_since_last_delinq ?? 0) / 120.0;
             return TrimReturnValue(nodeValue);
         }
 
         public static double MonthsSinceDerogatoryRemark(RawDataItem rawDataItem)
         {
-            var nodeValue = (rawDataItem.mths_since_last_major_derog ?? 120.0) / 120.0;
+            var nodeValue = (rawDataItem.mths_since_last_major_derog ?? 0) / 120.0;
             return TrimReturnValue(nodeValue);
         }
 
         public static double MonthsSincePublicRecord(RawDataItem rawDataItem)
         {
-            var nodeValue = (rawDataItem.mths_since_last_record ?? 120.0) / 120.0;
+            var nodeValue = (rawDataItem.mths_since_last_record ?? 0) / 120.0;
             return TrimReturnValue(nodeValue);
         }
 
@@ -360,11 +370,6 @@ namespace Trader.Translators
         public static double PurposeCar(RawDataItem rawDataItem)
         {
             return rawDataItem.purpose == "car" ? 1 : 0;
-        }
-
-        public static double Purpose(RawDataItem rawDataItem)
-        {
-            return rawDataItem.purpose == "" ? 1 : 0;
         }
 
         public static double PurposeCreditCard(RawDataItem rawDataItem)
@@ -449,11 +454,42 @@ namespace Trader.Translators
             return TrimReturnValue(nodeValue);
         }
 
+        public static double Defaulted(RawDataItem rawDataItem)
+        {
+            double nodeValue = 0;
+
+            switch (rawDataItem.loan_status)
+            {
+                case "Charged Off":
+                case "Default":
+                case "Does not meet the credit policy.  Status:Charged Off":
+                case "Does not meet the credit policy.  Status:Late (31-120 days)":
+                case "In Grace Period":
+                case "Late (16-30 days)":
+                case "Late (31-120 days)":
+                    nodeValue = 1;
+                    break;
+            }
+
+            return nodeValue;
+        }
+
+        public static double PercentRecovered(RawDataItem rawDataItem)
+        {
+            var value = ((double)rawDataItem.total_pymnt / (double)rawDataItem.funded_amnt);
+            return value;
+        }
+
         private static double TrimReturnValue(double value)
         {
             if (value >= 1) return 1;
             if (value <= 0) return 0;
             return value;
+        }
+
+        private static double Normalize(double val, double low, double high)
+        {
+            return (val - low) / (high - low);
         }
     }
 }

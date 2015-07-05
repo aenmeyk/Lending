@@ -12,14 +12,8 @@ namespace DataAccess.Repositories
 
         public IEnumerable<T> Get<T>()
         {
-            // TODO: Remove TOP 100
-            var queryText = string.Format("SELECT TOP 100 * FROM {0}", TableName);
-
-            using (var sqlConnection = new SqlConnection(ConnectionString))
-            {
-                sqlConnection.Open();
-                return sqlConnection.Query<T>(queryText);
-            }
+            var queryText = string.Format("SELECT * FROM {0}", TableName);
+            return ExecuteSelect<T>(queryText);
         }
 
         public void Truncate()
@@ -44,6 +38,15 @@ namespace DataAccess.Repositories
                 bulkCopy.BulkCopyTimeout = 0;
                 bulkCopy.DestinationTableName = TableName;
                 bulkCopy.WriteToServer(dataTable);
+            }
+        }
+
+        protected IEnumerable<T> ExecuteSelect<T>(string queryText)
+        {
+            using (var sqlConnection = new SqlConnection(ConnectionString))
+            {
+                sqlConnection.Open();
+                return sqlConnection.Query<T>(queryText);
             }
         }
     }

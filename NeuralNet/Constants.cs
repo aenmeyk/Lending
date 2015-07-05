@@ -4,7 +4,7 @@ namespace NeuralNet
 {
     internal static class NetworkSettings
     {
-        public static int InputNeuronCount = 84;
+        public static int InputNeuronCount = 40;
         public static int HiddenNeuronCount = InputNeuronCount/2;
     }
 

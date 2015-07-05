@@ -1,6 +1,4 @@
-﻿using Common.Models;
-using DataAccess.Repositories;
-using Trader.Translators;
+﻿using DataAccess.Repositories;
 
 namespace Trader.Strategies
 {
@@ -10,13 +8,6 @@ namespace Trader.Strategies
 
         public void Run()
         {
-            var rawData = _rawDataRepository.Get<RawDataItem>();
-
-            foreach (var rawDataItem in rawData)
-            {
-                var neuralNetworkitem = new NeuralNetworkItem();
-                neuralNetworkitem.AnnualIncome = NodeTranslators.AnnualIncome(rawDataItem);
-            }
         }
     }
 }

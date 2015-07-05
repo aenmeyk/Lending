@@ -15,6 +15,11 @@ namespace Common.Models
         public decimal loan_amnt { get; set; }
 
         /// <summary>
+        /// The total amount committed to that loan at that point in time.
+        /// </summary>
+        public decimal funded_amnt { get; set; }
+
+        /// <summary>
         /// The number of payments on the loan. Values are in months and can be either 36 or 60.
         /// </summary>
         public string term { get; set; }
@@ -52,7 +57,8 @@ namespace Common.Models
         /// <summary>
         /// The annual income provided by the borrower during registration.
         /// </summary>
-        public decimal annual_inc { get; set; }
+        public decimal? annual_inc { get; set; }
+
         public string verification_status { get; set; }
 
         /// <summary>
@@ -78,7 +84,7 @@ namespace Common.Models
         /// <summary>
         /// The number of 30+ days past-due incidences of delinquency in the borrower's credit file for the past 2 years
         /// </summary>
-        public int delinq_2yrs { get; set; }
+        public int? delinq_2yrs { get; set; }
 
         /// <summary>
         /// The month the borrower's earliest reported credit line was opened
@@ -173,7 +179,7 @@ namespace Common.Models
         /// <summary>
         /// Number of collections in 12 months excluding medical collections.
         /// </summary>
-        public int collections_12_mths_ex_med { get; set; }
+        public int? collections_12_mths_ex_med { get; set; }
 
         /// <summary>
         /// Months since most recent 90-day or worse rating.
