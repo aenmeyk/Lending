@@ -445,7 +445,7 @@ namespace Trader.Translators
 
         public static double Term(RawDataItem rawDataItem)
         {
-            return rawDataItem.term.Contains("36 months") ? 0 : 1;
+            return rawDataItem.term.Contains(Terms.MONTHS36) ? 0 : 1;
         }
 
         public static double CreditLines(RawDataItem rawDataItem)
