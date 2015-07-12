@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Common.Models;
 using DataAccess.Repositories;
 
@@ -18,15 +19,15 @@ namespace NeuralNet
         {
             var itemCount = neuralNetworkItems.Count();
 
-            //Parallel.For(0, ProcessingSettings.Trials, trial =>
-            for (var trial = 0; trial < ProcessingSettings.Trials; trial++)
+            Parallel.For(0, ProcessingSettings.Trials, trial =>
+            //for (var trial = 0; trial < ProcessingSettings.Trials; trial++)
             {
                 var inputValues = new double[itemCount][];
                 var outputValues = new double[itemCount];
                 PopulateValues(neuralNetworkItems, inputValues, outputValues);
                 var network = new Network(core, inputValues, outputValues);
 
-                network.LearningRate = ProcessingSettings.LearningRate * Math.Pow(ProcessingSettings.LearningRate, trial);
+                network.LearningRate = ProcessingSettings.LearningRate; // * Math.Pow(ProcessingSettings.LearningRate, trial);
 
                 for (int record = 0; record < network.InputValues.Count(); record++)
                 {
@@ -36,9 +37,9 @@ namespace NeuralNet
                     NetworkOperations.BackPropogate(network, record);
                 }
 
+            //};
+            });
                 PersistCoreValues(core);
-            };
-            //});
         }
 
         public double Predict(Core core, NeuralNetworkItem neuralNetworkItem)
@@ -137,7 +138,7 @@ namespace NeuralNet
             foreach (var neuralNetworkItem in neuralNetworkItems)
             {
                 inputValues[i] = GetInputValues(neuralNetworkItem, inputValues[i]);
-                outputValues[i] = Normalize((double)neuralNetworkItem.PercentRecovered, 0, 1.26);
+                outputValues[i] = Normalize(neuralNetworkItem.PercentRecovered, 0, 1.52);
 
                 i++;
             }
@@ -151,23 +152,23 @@ namespace NeuralNet
             inputValues[k++] = neuralNetworkItem.AnnualIncome;
             inputValues[k++] = neuralNetworkItem.Collections;
             inputValues[k++] = neuralNetworkItem.Delinquencies;
-            inputValues[k++] = neuralNetworkItem.Dti;
+            inputValues[k++] = Normalize(neuralNetworkItem.Dti, 0, 1.52);
             inputValues[k++] = neuralNetworkItem.EarliestCreditLine;
             inputValues[k++] = neuralNetworkItem.EmploymentLength;
             inputValues[k++] = neuralNetworkItem.IsEmploymed;
             inputValues[k++] = neuralNetworkItem.FicoLow;
             inputValues[k++] = neuralNetworkItem.FicoHigh;
-            //inputValues[k++] = neuralNetworkItem.Grade;
-            //inputValues[k++] = neuralNetworkItem.SubGrade;
+            inputValues[k++] = neuralNetworkItem.Grade;
+            inputValues[k++] = neuralNetworkItem.SubGrade;
             inputValues[k++] = neuralNetworkItem.HomeOwn;
             inputValues[k++] = neuralNetworkItem.HomeMortgage;
             inputValues[k++] = neuralNetworkItem.HomeRent;
-            inputValues[k++] = neuralNetworkItem.InitialListStatus;
-            inputValues[k++] = neuralNetworkItem.Inquiries;
-            inputValues[k++] = neuralNetworkItem.Installment;
-            inputValues[k++] = neuralNetworkItem.InterestRate;
+            //inputValues[k++] = neuralNetworkItem.InitialListStatus;
+            inputValues[k++] = Normalize(neuralNetworkItem.Inquiries, 0, 1.6);
+            inputValues[k++] = Normalize(neuralNetworkItem.Installment, 0.000288947368, 0.320262);
+            inputValues[k++] = Normalize(neuralNetworkItem.InterestRate, 0.0542, 0.2489);
             inputValues[k++] = neuralNetworkItem.VerificationStatus;
-            inputValues[k++] = neuralNetworkItem.LoanAmount;
+            inputValues[k++] = Normalize(neuralNetworkItem.LoanAmount, 0.000789473684, 0.83);
             inputValues[k++] = neuralNetworkItem.MonthsSinceDelinquent;
             inputValues[k++] = neuralNetworkItem.MonthsSinceDerogatoryRemark;
             inputValues[k++] = neuralNetworkItem.MonthsSincePublicRecord;
@@ -188,7 +189,7 @@ namespace NeuralNet
             inputValues[k++] = neuralNetworkItem.PurposeWedding;
             inputValues[k++] = neuralNetworkItem.RevolvingCreditBalance;
             inputValues[k++] = neuralNetworkItem.RevolvingCreditUtilization;
-            inputValues[k++] = neuralNetworkItem.Term;
+            //inputValues[k++] = neuralNetworkItem.Term;
             inputValues[k++] = neuralNetworkItem.CreditLines;
 
             return inputValues;

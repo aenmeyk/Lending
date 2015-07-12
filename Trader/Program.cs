@@ -11,8 +11,10 @@ namespace Trader
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var strategyRunner = new StrategyRunner();
-            strategyRunner.Run();
+            var neuralNetworkRunner = new NeuralNetworkRunner();
+            neuralNetworkRunner.Run();
+            //var strategyRunner = new StrategyRunner();
+            //strategyRunner.Run();
 
             Console.WriteLine();
             Console.WriteLine("Elapsed Seconds: {0}", stopwatch.Elapsed.TotalSeconds);

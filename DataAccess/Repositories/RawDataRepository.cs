@@ -12,7 +12,14 @@ namespace DataAccess.Repositories
 
         public IEnumerable<T> GetCompletedLoans<T>()
         {
-            var queryText = string.Format("SELECT * FROM {0} WHERE loan_status IN ('Charged Off', 'Fully Paid', 'Default') ", TableName);
+            const string queryTemplate = @"
+SELECT *
+FROM _RawLoanStats
+WHERE initial_list_status = 'f'
+    AND (DATEDIFF(m,issue_d_date,'20150331') >= 36 AND term = ' 36 months')
+    AND loan_status IN ('Charged Off', 'Fully Paid')";
+
+            var queryText = string.Format(queryTemplate, TableName);
             return ExecuteSelect<T>(queryText);
         }
     }

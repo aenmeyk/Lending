@@ -9,25 +9,27 @@ namespace Trader.Strategies
     public class StrategyRunner
     {
         private RawDataRepository _rawDataRepository = new RawDataRepository();
+        private Account _account = new Account();
 
         public void Run()
         {
-            var loans = GetLoans();
+            PurchaseLoans();
 
+            for(int month = 0; month < 60; month++)
+            {
+                _account.AdvanceMonth();
+            }
         }
 
-        private IEnumerable<Loan> GetLoans()
+        private void PurchaseLoans()
         {
-            var loans = new Collection<Loan>();
             var rawData = _rawDataRepository.GetCompletedLoans<RawDataItem>();
 
             foreach (var rawDataItem in rawData)
             {
                 var loan = new Loan(rawDataItem);
-                loans.Add(loan);
+                _account.PurchaseLoan(loan);
             }
-
-            return loans;
         }
     }
 }

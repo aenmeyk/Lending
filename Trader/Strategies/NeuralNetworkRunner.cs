@@ -15,7 +15,7 @@ namespace Trader.Strategies
 
         public void Run()
         {
-            const int trainingItems = 100000;
+            const int trainingItems = 25000;
 
             var core = new Core();
             core.InitializeArrays();
@@ -66,7 +66,7 @@ namespace Trader.Strategies
                 neuralNetworkitem.HomeOwn = NodeTranslators.HomeOwn(rawDataItem);
                 neuralNetworkitem.HomeMortgage = NodeTranslators.HomeMortgage(rawDataItem);
                 neuralNetworkitem.HomeRent = NodeTranslators.HomeRent(rawDataItem);
-                neuralNetworkitem.InitialListStatus = NodeTranslators.InitialListStatus(rawDataItem);
+                //neuralNetworkitem.InitialListStatus = NodeTranslators.InitialListStatus(rawDataItem);
                 neuralNetworkitem.Inquiries = NodeTranslators.Inquiries(rawDataItem);
                 neuralNetworkitem.Installment = NodeTranslators.Installment(rawDataItem);
                 neuralNetworkitem.InterestRate = NodeTranslators.InterestRate(rawDataItem);
@@ -92,7 +92,7 @@ namespace Trader.Strategies
                 neuralNetworkitem.PurposeWedding = NodeTranslators.PurposeWedding(rawDataItem);
                 neuralNetworkitem.RevolvingCreditBalance = NodeTranslators.RevolvingCreditBalance(rawDataItem);
                 neuralNetworkitem.RevolvingCreditUtilization = NodeTranslators.RevolvingCreditUtilization(rawDataItem);
-                neuralNetworkitem.Term = NodeTranslators.Term(rawDataItem);
+                //neuralNetworkitem.Term = NodeTranslators.Term(rawDataItem);
                 neuralNetworkitem.CreditLines = NodeTranslators.CreditLines(rawDataItem);
                 neuralNetworkitem.Defaulted = NodeTranslators.Defaulted(rawDataItem);
                 neuralNetworkitem.PercentRecovered = NodeTranslators.PercentRecovered(rawDataItem);

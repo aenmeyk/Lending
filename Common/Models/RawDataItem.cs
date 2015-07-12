@@ -185,5 +185,10 @@ namespace Common.Models
         /// Months since most recent 90-day or worse rating.
         /// </summary>
         public int? mths_since_last_major_derog { get; set; }
+
+        /// <summary>
+        /// Last month payment was received.
+        /// </summary>
+        public DateTime last_pymnt_d_date { get; set; }
     }
 }

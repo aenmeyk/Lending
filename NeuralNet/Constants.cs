@@ -14,8 +14,8 @@ namespace NeuralNet
         //public static DateTime TestPeriodEndDate = new DateTime(2020, 12, 31);
         public static double LearningRate = 0.2;
         //public static double EndLearningRate = 0.0001;
-        public static int Trials = 1;
-        public static double LearningRateMultiplier = 1;
+        public static int Trials = 20;
+        //public static double LearningRateMultiplier = 1;
     }
 
     internal static class TestSettings

@@ -264,26 +264,28 @@ namespace Trader.Translators
             return rawDataItem.home_ownership == "RENT" ? 1 : 0;
         }
 
-        public static double InitialListStatus(RawDataItem rawDataItem)
-        {
-            const double numberOfItems = 2;
-            double nodeValue;
+        //public static double InitialListStatus(RawDataItem rawDataItem)
+        //{
+        //    const double numberOfItems = 2;
+        //    double nodeValue;
 
-            switch (rawDataItem.initial_list_status)
-            {
-                case "f":
-                    nodeValue = 0 / numberOfItems;
-                    break;
-                case "w":
-                    nodeValue = 2 / numberOfItems;
-                    break;
-                default:
-                    nodeValue = 1 / numberOfItems;
-                    break;
-            }
+        //    switch (rawDataItem.initial_list_status)
+        //    {
+        //        case "f":
+        //            nodeValue = 0 / numberOfItems;
+        //            break;
+        //        case "w":
+        //            nodeValue = 2 / numberOfItems;
+        //            break;
+        //        default:
+        //            nodeValue = 1 / numberOfItems;
+        //            break;
+        //    }
 
-            return nodeValue;
-        }
+        //    return nodeValue;
+
+        //    //return rawDataItem.funded_amnt > rawDataItem.total_pymnt ? 0 : 1;
+        //}
 
         public static double Inquiries(RawDataItem rawDataItem)
         {
@@ -311,15 +313,15 @@ namespace Trader.Translators
             const double numberOfItems = 2;
             double nodeValue = 0;
 
-            switch (rawDataItem.initial_list_status)
+            switch (rawDataItem.verification_status)
             {
-                case "VERIFIED - income":
+                case "not verified":
                     nodeValue = 0 / numberOfItems;
                     break;
                 case "VERIFIED - income source":
                     nodeValue = 1 / numberOfItems;
                     break;
-                case "not verified":
+                case "VERIFIED - income":
                     nodeValue = 2 / numberOfItems;
                     break;
             }
@@ -333,7 +335,7 @@ namespace Trader.Translators
             {
                 return 1;
             }
-
+            // Maybe we ONLY return the loan_amnt. annual_inc has already been factored in
             return (double)(rawDataItem.loan_amnt / rawDataItem.annual_inc);
         }
 
@@ -443,10 +445,10 @@ namespace Trader.Translators
             return (double)rawDataItem.revol_util;
         }
 
-        public static double Term(RawDataItem rawDataItem)
-        {
-            return rawDataItem.term.Contains(Terms.MONTHS36) ? 0 : 1;
-        }
+        //public static double Term(RawDataItem rawDataItem)
+        //{
+        //    return rawDataItem.term.Contains(Terms.MONTHS36) ? 0 : 1;
+        //}
 
         public static double CreditLines(RawDataItem rawDataItem)
         {
@@ -476,8 +478,16 @@ namespace Trader.Translators
 
         public static double PercentRecovered(RawDataItem rawDataItem)
         {
+            // Need to update this to be the annualized rate of return. 
+            // If they paid their loan early then we get to lend it out again to someone else.
             var value = ((double)rawDataItem.total_pymnt / (double)rawDataItem.funded_amnt);
             return value;
+        }
+
+        public static double AnnualizedReturn(RawDataItem rawDataItem)
+        {
+            var durationMonths = (rawDataItem.last_pymnt_d_date - rawDataItem.issue_d_date).TotalDays;
+            return 5;
         }
 
         private static double TrimReturnValue(double value)
@@ -485,11 +495,6 @@ namespace Trader.Translators
             if (value >= 1) return 1;
             if (value <= 0) return 0;
             return value;
-        }
-
-        private static double Normalize(double val, double low, double high)
-        {
-            return (val - low) / (high - low);
         }
     }
 }
